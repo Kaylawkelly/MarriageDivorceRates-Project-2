@@ -58,7 +58,7 @@ function buildMap(year) {
         .attr("height", height);
 
     // Load in my states data!
-    var marriageRatesAndStatesUrl = `/metadata/year/${year}`;
+    var marriageRates = `/metadata/year/${year}`;
     d3.json(marriageRatesAndStatesUrl, function (data) {
         console.log('state data', data);
         var marriage_rates = data.marriage_rates;
@@ -66,7 +66,7 @@ function buildMap(year) {
 
 
         // Load GeoJSON data and merge with states data
-        var usMapUrl = "https://gist.githubusercontent.com/michellechandra/0b2ce4923dc9b5809922/raw/a476b9098ba0244718b496697c5b350460d32f99/us-states.json";
+        var usMapUrl = "https://leafletjs.com/examples/choropleth/us-states.js";
         d3.json(usMapUrl, function (json) {
             console.log('json state', json);
             // Loop through each state data value in the .csv file
