@@ -1,15 +1,30 @@
-var svgWidth = 960;
-var svgHeight = 500;
+var margin = { top:0, left:0, right:0, bottom:0}
+    height = 400 - margin.top - margin.bottom,
+    width = 800 - margin.left - margin.right;
 
-var margin = {
-  top: 20,
-  right: 40,
-  bottom: 20,
-  left: 100
-};
 
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
+var svg = d3.select("#map")
+    .append("svg")
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width + margin.left + margin.right)
+    .append("g")
+    .attr("transfrom", "translate(" + margin.left + "," + margin.top + ")");
+
+
+d3.queue()
+    .defer(d3.jason, "us.json")
+    .await(ready)
+
+
+var projection = d3.geoMercator()
+    .translate([width/2, height/2])    
+    .scale([100])
+
+var path = d3.geoPath()
+    .projection(projection)
+
+function ready (error,data)
+
 
 
 // D3 Projection
@@ -46,7 +61,7 @@ var toolTip = d3.select("body")
 
 
 
-function buildMap(year) {
+function buildMap(Rate) {
     // Remove older SVG
     d3.select("#map svg").remove();
     d3.select(".legend").remove();
