@@ -10,6 +10,7 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	maxZoom: 18,
 	accessToken: API_KEY
 });
+
 // Create a base layer that holds both maps.
 let baseMaps = {
   "Streets": streets,
@@ -29,16 +30,16 @@ d3.json("Resources/myfile.geojson").then(function(data) {
   function styleInfo(feature) {
     return {
       opacity: 1,
-      fillOpacity: 1,
-      fillColor: "#ffae42",
-      color: "#000000",
+      fillOpacity: 5,
+      fillColor: "#ed2121",
+      color: "black",
       radius: getRadius(feature.properties.Average),
       stroke: true,
       weight: 0.5
     };
   }
   function getRadius(Average) {
-    return Average *2;
+    return Average *1.5;
   }
 
 
