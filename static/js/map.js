@@ -1,206 +1,63 @@
-var margin = { top:0, left:0, right:0, bottom:0}
-    height = 400 - margin.top - margin.bottom,
-    width = 800 - margin.left - margin.right;
 
-
-var svg = d3.select("#map")
-    .append("svg")
-    .attr("height", height + margin.top + margin.bottom)
-    .attr("width", width + margin.left + margin.right)
-    .append("g")
-    .attr("transfrom", "translate(" + margin.left + "," + margin.top + ")");
-
-
-d3.queue()
-    .defer(d3.jason, "us.json")
-    .await(ready)
-
-
-var projection = d3.geoMercator()
-    .translate([width/2, height/2])    
-    .scale([100])
-
-var path = d3.geoPath()
-    .projection(projection)
-
-function ready (error,data)
-
-
-
-// D3 Projection
-var projection = d3.geo.albersUsa()
-				   .translate([width/2, height/2])    // translate to center of screen
-				   .scale([1000]);          // scale things down so see entire US
-
-// Define path generator
-var path = d3.geo.path()               // path generator that will convert GeoJSON to SVG paths
-		  	 .projection(projection);  // tell path generator to use albersUsa projection
-
-
-
-var color = function scale(d) {
-        return d < 1 ? '#ebfaeb' :
-                d < 2  ? '#c2f0c2' :
-                  d < 4  ? '#99e699' :
-                    d < 6  ? '#5cd65c' :
-                        d < 8  ? '#33cc33' :
-                            d< 10 ? '#29a329':
-                                '#145214'
+  let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 20,
+	accessToken: API_KEY
+});
+// We create the tile layer that will be the background of our map.
+let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	accessToken: API_KEY
+});
+// Create a base layer that holds both maps.
+let baseMaps = {
+  "Streets": streets,
+  "Satellite": satelliteStreets
+};
+// Create the map object with center, zoom level and default layer.
+let map = L.map('map', {
+	center: [40.7, -94.5],
+	zoom: 3,
+	layers: [streets]
+});
+// Pass our map layers into our layer control and add the layer control to the map.
+L.control.layers(baseMaps).addTo(map);
+// Retrieve the earthquake GeoJSON data.
+d3.json("Resources/myfile.geojson").then(function(data) {
+  
+  function styleInfo(feature) {
+    return {
+      opacity: 1,
+      fillOpacity: 1,
+      fillColor: "#ffae42",
+      color: "#000000",
+      radius: getRadius(feature.properties.Average),
+      stroke: true,
+      weight: 0.5
     };
+  }
+  function getRadius(Average) {
+    return Average *2;
+  }
 
 
-var colorsRange = [0,1,2,4,6,8,10];
-var legendText = ["0-1","1-2","2-4","4-6","6-8","8-10",">10"];
-
-
-// Append Div for tooltip to SVG
-var toolTip = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-
-
-function buildMap(Rate) {
-    // Remove older SVG
-    d3.select("#map svg").remove();
-    d3.select(".legend").remove();
-
-    //Create SVG element and append map to the SVG
-    var svg = d3.select("#map")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-    // Load in my states data!
-    var marriageRatesAnldStatesUr = `/metadata/year/${year}`;
-    d3.json(marriageRatesAndStatesUrl, function (data) {
-        console.log('state data', data);
-        var marriage_rates = data.marriage_rates;
-        var states = data.state;
-
-
-        // Load GeoJSON data and merge with states data
-        var usMapUrl = "/data/gz_2010_us_040_00_5m.json";
-        d3.json(usMapUrl, function (json) {
-            console.log('json state', json);
-            // Loop through each state data value in the .csv file
-            for (var i = 0; i < data.states.length; i++) {
-
-                // Grab State Name
-                var dataState = data.states[i];
-
-                // Grab data value
-                var dataValue = data.marriage_rates[i];
-
-                // Find the corresponding state inside the GeoJSON
-                for (var j = 0; j < json.features.length; j++) {
-                    var jsonState = json.features[j].properties.name;
-
-                    if (dataState == jsonState) {
-
-                        // Copy the data value into the JSON
-                        json.features[j].properties.marriage_rates = dataValue;
-
-                        // Stop looking through the JSON
-                        break;
-                    }
-                }
-            }
-
-            // Bind the data to the SVG and create one path per GeoJSON feature
-
-            svg.selectAll("path")
-                .data(json.features)
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .style("stroke", "#fff")
-                .style("stroke-width", "1")
-                .style("fill", function (d) {
-                    var value = d.properties.marriage_rates;
-
-                    if (value) {
-                        //If value exists…
-                        return color(value);
-                    } else {
-                        //If value is undefined…
-                        return "rgb(213,222,217)";
-                    }
-                })
-                .on("mouseover", function (d) {
-                    toolTip.transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    toolTip.html(`<strong>${d.properties.name}</strong>
-                                <p>${d.properties.marriage_rates}</p>`)
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
-                })
-
-                // fade out tooltip on mouse out
-                .on("mouseout", function (d) {
-                    toolTip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
-
-            var legend = d3.select("#map").append("svg")
-                .attr("class", "legend")
-                .attr("width", 140)
-                .attr("height", 200)
-                .selectAll("g")
-                .data(colorsRange)
-                .enter()
-                .append("g")
-                .attr("transform", function (d, i) {
-                    return "translate(0," + i * 20 + ")";
-                });
-
-            legend.append("rect")
-                .attr("width", 18)
-                .attr("height", 18)
-                .style("fill", color);
-
-            legend.append("text")
-                .data(legendText)
-                .attr("x", 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .text(function (d) {
-                    return d;
-                });
-
-        });
-    });
-
-}
-
-
-function init() {
-
-    // Set up the dropdown menu
-    // Grab a reference to the dropdown select element
-    var selector = d3.select("#selYear");
-
-    // Use the list of sample names to populate the select options
-    d3.json("/years", years => {
-            years.forEach((instance) => {
-            selector
-            .append("option")
-            .text(instance)
-            .property("value", instance);
-            });
-
-        // Use Alabama to build the initial plot
-        const defaultYear = years[0];
-        buildMap(defaultYear);
-    });
-}
-
-function yearChanged(newYear) {
-    // Fetch new data each time a new state is selected
-    buildMap(newYear);
-}
-
-init();
+// Creating a GeoJSON layer with the retrieved data.
+  L.geoJson(data, {
+    	// We turn each feature into a circleMarker on the map.
+    	pointToLayer: function(feature, latlng) {
+      		console.log(data);
+      		return L.circleMarker(latlng);
+        },
+      // We set the style for each circleMarker using our styleInfo function.
+    style: styleInfo,
+    onEachFeature: function(feature, layer) {
+        layer.bindPopup(
+          "State: "
+            + feature.properties.State
+            + "<br>Average: "
+            + feature.properties.Average
+            
+        );}
+    }).addTo(map);
+});
