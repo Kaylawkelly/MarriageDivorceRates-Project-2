@@ -1,0 +1,82 @@
+      
+        var options = {
+          series: [
+        {
+          name: 'Divorces',
+          data: [-3.6,-3.7,-3.7,-3.8,-3.9,-3.8,-3.7,-3.6,-4.3,-4.4,-4.4,-4.3,-4.5,-4.9,-4.9,-4.9,-5.2,-5.4,-5.4,-5.5,-5.7,-6.0,-6.1]
+        }
+		{
+          name: 'Marriages',
+          data: [6.7,6.8,7.0,7.1,7.4,7.8,7.8,8.2,8.4,8.2,8.3,8.6,8.9,9.2,9.2,9.4,9.6,9.9,9.4,10.1,10.8,9.8,10.6]
+        },
+        ],
+          chart: {
+          type: 'bar',
+          height: 440,
+          stacked: true
+        },
+        colors: ['#008FFB', '#FF4560'],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: '80%',
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: 1,
+          colors: ["#fff"]
+        },
+        
+        grid: {
+          xaxis: {
+            lines: {
+              show: false
+            }
+          }
+        },
+        yaxis: {
+          min: -15,
+          max: 15,
+          title: {
+            // text: 'Age',
+          },
+        },
+        tooltip: {
+          shared: false,
+          x: {
+            formatter: function (val) {
+              return val
+            }
+          },
+          y: {
+            formatter: function (val) {
+              return Math.abs(val)
+            }
+          }
+        },
+        title: {
+          text: 'Marriage & Divorce Rates for ' + 'Alabama'
+        },
+        xaxis: {
+          categories: ['2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012',
+            '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003',
+            '2002', '2001', '2000', '1999', '1995', '1990'
+          ],
+          title: {
+            text: 'Rates per 1,000 Total Population'
+          },
+          labels: {
+            formatter: function (val) {
+              return Math.abs(Math.round(val))
+            }
+          }
+        },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      
+ 
