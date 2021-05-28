@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Marriage and Divorce Rates by State</title>
+
+    <!-- //<link href="../../assets/styles.css" rel="stylesheet" /> -->
+
+    <style>
+      
+        #chart {
+      max-width: 650px;
+      margin: 35px auto;
+    }
+      
+    </style>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <script src="promise.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="bar_switch.js"></script>
+    
+
+    <script>
+      // Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+      // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+      var _seed = 42;
+      Math.random = function() {
+        _seed = _seed * 16807 % 2147483647;
+        return (_seed - 1) / 2147483646;
+      };
+    </script>
+
+</head>
+
+<body>
+
+  <div id="plot"></div>
+
+<form action="/action_page.php">
+  <label for="states">Choose a state:</label>
+  <select name="state" id="states">
+    <option value="al">Alabama</option>
+    <option value="ak">Alaska</option>
+    <option value="az">Arizona</option>
+    <option value="ar">Arkansas</option>
+    <option value="ca">California</option>
+    <option value="co">Colorado</option>
+    <option value="ct">Connecticut</option>
+    <option value="de">Delaware</option>
+    <option value="dc">District of Columbia</option>
+    <option value="fl">Florida</option>
+    <option value="ga">Georgia</option>
+    <option value="hi">Hawaii</option>
+    <option value="id">Idaho</option>
+    <option value="il">Illinois</option>
+    <option value="in">Indiana</option>
+    <option value="ia">Iowa</option>
+    <option value="ks">Kansas</option>
+    <option value="ky">Kentucky</option>
+    <option value="la">Louisiana</option>
+    <option value="me">Maine</option>
+    <option value="md">Maryland</option>
+    <option value="ma">Massachusetts</option>
+    <option value="mi">Michigan</option>
+    <option value="mn">Minnesota</option>
+    <option value="ms">Mississippi</option>
+    <option value="mo">Missouri</option>
+    <option value="mt">Montana</option>
+    <option value="ne">Nebraska</option>
+    <option value="nv">Nevada</option>
+    <option value="nh">New Hampshire</option>
+    <option value="nj">New Jersey</option>
+    <option value="nm">New Mexico</option>
+    <option value="ny">New York</option>
+    <option value="nc">North Carolina</option>
+    <option value="nd">North Dakota</option>
+    <option value="oh">Ohio</option>
+    <option value="ok">Oklahoma</option>
+    <option value="or">Oregon</option>
+    <option value="pa">Pennsylvania</option>
+    <option value="ri">Rhode Island</option>
+    <option value="sc">South Carolina</option>
+    <option value="sd">South Dakota</option>
+    <option value="tn">Tennessee</option>
+    <option value="tx">Texas</option>
+    <option value="ut">Utah</option>
+    <option value="vt">Vermont</option>
+    <option value="va">Virginia</option>
+    <option value="wa">Washington</option>
+    <option value="wv">West Virginia</option>
+    <option value="wi">Wisconsin</option>
+    <option value="wy">Wyoming</option>
+    <option value="nat">National</option>
+  </select>
+
+
+
+
+    <div id="chart"></div>
+<script>
+
+        // Use D3 to select the dropdown menu
+  var dropdownMenu = d3.select("#states");
+  // Assign the value of the dropdown menu option to a variable
+// Call updatePlot() when a change takes place to the DOM
+d3.selectAll("#states").on("change", updatePlot());
+
+function updatePlot(){ 
+  //let bar_marriage_data
+  //let bar_divorce_data
+  var dataset = dropdownMenu.property("value");
+	chooseState(dataset);
+
+	console.log(dataset);
+  console.log(bar_marriage_data);
+  console.log(bar_divorce_data);
+  
+  var options = {
+          series: [{
+          name: 'Marriages',
+          data: bar_marriage_data
+        },
+        {
+          name: 'Divorces',
+          data: bar_divorce_data
+        }
+        ],
+          chart: {
+          type: 'bar',
+          height: 440,
+          stacked: true
+        },
+        colors: ['#008FFB', '#FF4560'],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: '80%',
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: 1,
+          colors: ["#fff"]
+        },
+        
+        grid: {
+          xaxis: {
+            lines: {
+              show: false
+            }
+          }
+        },
+        yaxis: {
+          min: -15,
+          max: 15,
+          title: {
+            // text: 'Age',
+          },
+        },
+        tooltip: {
+          shared: false,
+          x: {
+            formatter: function (val) {
+              return val
+            }
+          },
+          y: {
+            formatter: function (val) {
+              return Math.abs(val)
+            }
+          }
+        },
+        title: {
+          text: 'Marriage & Divorce Rates for ' + 'Alabama'
+        },
+        xaxis: {
+          categories: ['2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012',
+            '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003',
+            '2002', '2001', '2000', '1999', '1995', '1990'
+          ],
+          title: {
+            text: 'Rates per 1,000 Total Population'
+          },
+          labels: {
+            formatter: function (val) {
+              return Math.abs(Math.round(val))
+            }
+          }
+        },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+        //updatePlot();
+      }
+</script>
+      
+
+</body>
+
+</html>
