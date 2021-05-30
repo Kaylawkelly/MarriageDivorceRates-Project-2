@@ -11,7 +11,7 @@
 
     <style>
       
-        #chart {
+        #barChart {
       max-width: 650px;
       margin: 35px auto;
     }
@@ -44,7 +44,7 @@
 
 <form action="/action_page.php">
   <label for="states">Choose a state:</label>
-  <select name="state" id="states">
+  <select id="states" onchange="getData(this.Value)">
     <option value="al">Alabama</option>
     <option value="ak">Alaska</option>
     <option value="az">Arizona</option>
@@ -59,7 +59,7 @@
     <option value="hi">Hawaii</option>
     <option value="id">Idaho</option>
     <option value="il">Illinois</option>
-    <option value="in">Indiana</option>
+    <option value="ind">Indiana</option>
     <option value="ia">Iowa</option>
     <option value="ks">Kansas</option>
     <option value="ky">Kentucky</option>
@@ -99,110 +99,33 @@
     <option value="nat">National</option>
   </select>
 
+  <div id="barChart"></div>
+  <script src="bar_data.js"></script>
+  <script src="barGraph_Main.js"></script>
 
-
-
-    <div id="chart"></div>
-<script>
-
-        // Use D3 to select the dropdown menu
-  var dropdownMenu = d3.select("#states");
-  // Assign the value of the dropdown menu option to a variable
-// Call updatePlot() when a change takes place to the DOM
-d3.selectAll("#states").on("change", updatePlot());
-
-function updatePlot(){ 
-  //let bar_marriage_data
-  //let bar_divorce_data
-  var dataset = dropdownMenu.property("value");
-	chooseState(dataset);
-
-	console.log(dataset);
-  console.log(bar_marriage_data);
-  console.log(bar_divorce_data);
-  
-  var options = {
-          series: [{
-          name: 'Marriages',
-          data: bar_marriage_data
-        },
-        {
-          name: 'Divorces',
-          data: bar_divorce_data
-        }
-        ],
-          chart: {
-          type: 'bar',
-          height: 440,
-          stacked: true
-        },
-        colors: ['#008FFB', '#FF4560'],
-        plotOptions: {
-          bar: {
-            horizontal: true,
-            barHeight: '80%',
-          },
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          width: 1,
-          colors: ["#fff"]
-        },
-        
-        grid: {
-          xaxis: {
-            lines: {
-              show: false
-            }
-          }
-        },
-        yaxis: {
-          min: -15,
-          max: 15,
-          title: {
-            // text: 'Age',
-          },
-        },
-        tooltip: {
-          shared: false,
-          x: {
-            formatter: function (val) {
-              return val
-            }
-          },
-          y: {
-            formatter: function (val) {
-              return Math.abs(val)
-            }
-          }
-        },
-        title: {
-          text: 'Marriage & Divorce Rates for ' + 'Alabama'
-        },
-        xaxis: {
-          categories: ['2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012',
-            '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003',
-            '2002', '2001', '2000', '1999', '1995', '1990'
-          ],
-          title: {
-            text: 'Rates per 1,000 Total Population'
-          },
-          labels: {
-            formatter: function (val) {
-              return Math.abs(Math.round(val))
-            }
-          }
-        },
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-        //updatePlot();
-      }
-</script>
-      
+  <br><br>
+  <p>The general trend for 
+    both marriage rates and divorce rates are on the decline,
+  but the rates vary from state to state.  The access to both
+  state and national data allows comparisons to be made between states
+  and to the national average.
+  Analysis can lead to conclusions beyond the visualizations, and
+trends can be identified and characterized.</p>  
+<p>The behavior of marriage and divorce rates can be driven by historical
+  events, such as political policy, natural disasters, and economic factors.  
+  In-depth analysis may provide correlations such key events to effects on the marriage 
+  and divorce rates year-by-year and state-by-state.
+</p>
+<p>The acquisition of specific data sets could illuminate factors 
+  that are driving the observed trends.  Factors such as women's rights, birth control use,
+  cohabitation, education level, and income levels could have impact on the marriage and 
+ divorce rates on the local and national levels.  More targeted surveying 
+ can deepen the collective understanding of underlying forces that shape marriage 
+ and divorce decisions.
+</p>
+<p>The collection and analysis of data can explain and predict the evolution 
+  of marriage and divorce in the United States.
+</p>
 
 </body>
 
