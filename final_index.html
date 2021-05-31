@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Marriage and Divorce Rates in The USA</title>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css" />
+    <!-- d3 JavaScript -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+      <!-- //<link href="../../assets/styles.css" rel="stylesheet" /> -->
+
+      <style>
+        #barChart {
+      max-width: 650px;
+      margin: 35px auto;
+    }
+    </style>
+    <!--Javascript for bar chart-->
+      <script src="https://d3js.org/d3.v5.min.js"></script>
+
+      <script src="./static/js/promise.js"></script>
+  
+      
+      <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+      <script src="./static/js/bar_switch.js"></script>
+      
+  
+      <script>
+        // Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+        // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+        var _seed = 42;
+        Math.random = function() {
+          _seed = _seed * 16807 % 2147483647;
+          return (_seed - 1) / 2147483646;
+        };
+      </script>
+  
+</head>
+  <body>
+    <!-- The div that holds our map -->
+    <!-- <div id="map"></div> -->
+
+    <!-- The div that holds Line Chart -->
+    <div>
+      <select id="selDataset" onchange="optionChanged(this.value)"></select>
+      <div id="line"></div>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script
+      src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""
+    ></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- API key -->
+    <script type="text/javascript" src="static/js/config.js"></script>
+    <!-- Our JavaScript -->
+    <!-- <script type="text/javascript" src="static/js/map.js"></script> -->
+    <script type="text/javascript" src="static/js/line.js"></script>
+    <div class="col col-12 col-md-8 divbdy">
+      <br>
+      <h2>Marriage Rates over Time by State</h2> <!--RB-5/31/2021-->
+      <p> <!--RB-5/31/2021-->
+        When plotted versus time, the general downward trend in marriages is apparent 
+        on the state-by-state level.  Despite such a negative trend, there are some 
+        states for which there was an uptick between 2008 and 2014.  This is a potential 
+        indication that there are event-driven effects that are captured in the marriage rate 
+        statistics, however deeper analysis is required to understand any correlations that may exist.
+      </p>
+
+      <hr />
+    </div>
+    <div id="barPlot"></div> <!--RB-5/31/2021-->
+
+    <form action="/action_page.php">
+      <label for="states">Choose a state:</label>
+      <select id="states" onchange="getData(this.Value)">
+        <option value="al">Alabama</option>
+        <option value="ak">Alaska</option>
+        <option value="az">Arizona</option>
+        <option value="ar">Arkansas</option>
+        <option value="ca">California</option>
+        <option value="co">Colorado</option>
+        <option value="ct">Connecticut</option>
+        <option value="de">Delaware</option>
+        <option value="dc">District of Columbia</option>
+        <option value="fl">Florida</option>
+        <option value="ga">Georgia</option>
+        <option value="hi">Hawaii</option>
+        <option value="id">Idaho</option>
+        <option value="il">Illinois</option>
+        <option value="ind">Indiana</option>
+        <option value="ia">Iowa</option>
+        <option value="ks">Kansas</option>
+        <option value="ky">Kentucky</option>
+        <option value="la">Louisiana</option>
+        <option value="me">Maine</option>
+        <option value="md">Maryland</option>
+        <option value="ma">Massachusetts</option>
+        <option value="mi">Michigan</option>
+        <option value="mn">Minnesota</option>
+        <option value="ms">Mississippi</option>
+        <option value="mo">Missouri</option>
+        <option value="mt">Montana</option>
+        <option value="ne">Nebraska</option>
+        <option value="nv">Nevada</option>
+        <option value="nh">New Hampshire</option>
+        <option value="nj">New Jersey</option>
+        <option value="nm">New Mexico</option>
+        <option value="ny">New York</option>
+        <option value="nc">North Carolina</option>
+        <option value="nd">North Dakota</option>
+        <option value="oh">Ohio</option>
+        <option value="ok">Oklahoma</option>
+        <option value="or">Oregon</option>
+        <option value="pa">Pennsylvania</option>
+        <option value="ri">Rhode Island</option>
+        <option value="sc">South Carolina</option>
+        <option value="sd">South Dakota</option>
+        <option value="tn">Tennessee</option>
+        <option value="tx">Texas</option>
+        <option value="ut">Utah</option>
+        <option value="vt">Vermont</option>
+        <option value="va">Virginia</option>
+        <option value="wa">Washington</option>
+        <option value="wv">West Virginia</option>
+        <option value="wi">Wisconsin</option>
+        <option value="wy">Wyoming</option>
+        <option value="nat">National</option>
+      </select>
+    
+      <div id="barChart">
+      <script src="./static/js/bar_data.js"></script>
+      <script src="./static/js/barGraph_Main.js"></script>
+    </div>
+    </form>
+    <div class="col col-12 col-md-8 divbdy">
+       <h2>Marriage & Divorce Rates by State Bar Graph</h2>
+      <p>The general trend for 
+        both marriage rates and divorce rates are on the decline,
+      but the rates vary from state to state.  The access to both
+      state and national data allows comparisons to be made between states
+      and to the national average.
+      Analysis can lead to conclusions beyond the visualizations, and
+    trends can be identified and characterized.</p>  
+    <p>The behavior of marriage and divorce rates can be driven by historical
+      events, such as political policy, natural disasters, and economic factors.  
+      In-depth analysis may provide correlations between such key events to effects on the marriage 
+      and divorce rates year-by-year and state-by-state.
+    </p>
+    <p>The acquisition of specific data sets could illuminate factors 
+      that are driving the observed trends.  Factors such as women's rights, birth control use,
+      cohabitation, education level, and income levels could have impact on the marriage and 
+     divorce rates on the local and national levels.  More targeted surveying 
+     can deepen the collective understanding of underlying forces that shape marriage 
+     and divorce decisions.
+    </p>
+    <p>The collection and analysis of data can explain and predict the evolution 
+      of marriage and divorce in the United States.
+    </p>
+        </div>
+  
+  </body>
+</html>
