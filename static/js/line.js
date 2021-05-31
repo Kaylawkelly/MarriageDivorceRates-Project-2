@@ -21,8 +21,9 @@ var drawChart = function (year, distribution) {
     type: 'scatter',
   };
   var data = [trace];
+  //RB - 5/31/2021
   var layout = {
-    title: 'Marriage rates by year',
+    title: 'Marriage Rates by Year',
     xaxis: {
       title: 'Year',
       showgrid: false,
@@ -83,8 +84,9 @@ const showAllStates = () => {
         name,
       };
     });
-    var layout = {
-      title: 'Marriage rates by year',
+      //RB - 5/31/2021
+      var layout = {
+      title: 'Marriage Rates by Year',
       xaxis: {
         title: 'Year',
         showgrid: false,
