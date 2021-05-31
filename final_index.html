@@ -14,6 +14,11 @@
     />
     <!-- Our CSS -->
     <link rel="stylesheet" type="text/css" href="static/css/style.css" />
+    <h1>Marriage and Divorce Study</h1>
+    <p>This page includes plots that showcase historical marriage rates 
+      and divorce rates on both the national and state levels. All 
+    marriage and divorce rates are per 1,000 total population, and the data spans 
+  the years of 1990 to 2019.</p>
     <!-- d3 JavaScript -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
       <!-- //<link href="../../assets/styles.css" rel="stylesheet" /> -->
@@ -47,29 +52,48 @@
 </head>
   <body>
     <!-- The div that holds our map -->
-    <!-- <div id="map"></div> -->
+    <div id="map"></div>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    <!-- API key -->
+    <script type="text/javascript" src="static/js/config.js"></script>
+    <!-- Our JavaScript -->
+    <script type="text/javascript" src="static/js/map.js"></script>
+    <div class="col col-12 col-md-8 divbdy">
+      <br>
+      <h2>Summary: Average Marriage Rate by State</h2>
+      <p>This map displays the average state rate for each state. 
+        The top 5 are Nevada (50.3), Hawaii (18.3), Arkansas (11.9), 
+        Tennessee (10.6) and Idaho (9.8). In this dataset Nevada is 
+        a major outlier due to their marriage laws. The majority of 
+        the USA marriage rate ranges from 12-5. Hover over a state to 
+        identify their marriage rate. </p>
+      <hr>
+    </div>
 
     <!-- The div that holds Line Chart -->
     <div>
       <select id="selDataset" onchange="optionChanged(this.value)"></select>
       <div id="line"></div>
-    </div>
+   
 
     <!-- Leaflet JavaScript -->
-    <script
+    <!-- <script
       src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
       integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
       crossorigin=""
-    ></script>
+    ></script> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- API key -->
-    <script type="text/javascript" src="static/js/config.js"></script>
+    <!-- <script type="text/javascript" src="static/js/config.js"></script> -->
     <!-- Our JavaScript -->
     <!-- <script type="text/javascript" src="static/js/map.js"></script> -->
     <script type="text/javascript" src="static/js/line.js"></script>
     <div class="col col-12 col-md-8 divbdy">
       <br>
-      <h2>Marriage Rates over Time by State</h2> <!--RB-5/31/2021-->
+      <h2>Summary: Marriage Rates over Time by State</h2> <!--RB-5/31/2021-->
       <p> <!--RB-5/31/2021-->
         When plotted versus time, the general downward trend in marriages is apparent 
         on the state-by-state level.  Despite such a negative trend, there are some 
@@ -80,7 +104,9 @@
 
       <hr />
     </div>
-    <div id="barPlot"></div> <!--RB-5/31/2021-->
+  </div>
+  
+    <div id="barPlot"> <!--RB-5/31/2021-->
 
     <form action="/action_page.php">
       <label for="states">Choose a state:</label>
@@ -145,7 +171,7 @@
     </div>
     </form>
     <div class="col col-12 col-md-8 divbdy">
-       <h2>Marriage & Divorce Rates by State Bar Graph</h2>
+       <h2>Summary: Marriage & Divorce Rates by State Bar Graph</h2>
       <p>The general trend for 
         both marriage rates and divorce rates are on the decline,
       but the rates vary from state to state.  The access to both
@@ -169,6 +195,6 @@
       of marriage and divorce in the United States.
     </p>
         </div>
-  
+      </div>
   </body>
 </html>
